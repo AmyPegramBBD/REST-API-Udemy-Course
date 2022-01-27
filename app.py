@@ -17,6 +17,11 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.secret_key = 'key'
 api = Api(app)
 
+uri = os.environ.get("DATABASE_URL",'sqlite:///data.db')  # or other relevant config var
+if uri.startswith("postgres://"):
+    uri = uri.replace("postgres://", "postgresql://", 1)
+# rest of connection code using the connection string `uri`
+
 jwt = JWT(app,authenticate,identity) #a new endpoint is created, a /auth
 
 api.add_resource(Store, '/store/<string:name>')
